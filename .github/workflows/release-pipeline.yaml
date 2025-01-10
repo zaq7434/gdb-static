@@ -1,6 +1,7 @@
 name: gdb-static-release-pipeline
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
