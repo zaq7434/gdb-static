@@ -1,10 +1,12 @@
-ARCHS := x86_64 arm aarch64 powerpc mips mipsel
+ARCHS := x86_64
 
+TARGETS := $(addprefix build-, $(ARCHS))
 PYTHON_TARGETS := $(addprefix build-with-python-, $(ARCHS))
-ALL_TARGETS := $(PYTHON_TARGETS)
+ALL_TARGETS := $(TARGETS) $(PYTHON_TARGETS)
 
+PACK_TARGETS := $(addprefix pack-, $(ARCHS))
 PYTHON_PACK_TARGETS := $(addprefix pack-with-python-, $(ARCHS))
-ALL_PACK_TARGETS := $(PYTHON_PACK_TARGETS)
+ALL_PACK_TARGETS := $(PACK_TARGETS) $(PYTHON_PACK_TARGETS)
 
 SUBMODULE_PACKAGES := $(wildcard src/submodule_packages/*)
 BUILD_PACKAGES_DIR := "build/packages"
@@ -47,6 +49,8 @@ download-packages: build/download-packages.stamp
 
 build: $(ALL_TARGETS)
 
+$(TARGETS): build-%:
+	@$(MAKE) _build-$*
 
 $(PYTHON_TARGETS): build-with-python-%:
 	@WITH_PYTHON="--with-python" $(MAKE) _build-$*
@@ -58,6 +62,7 @@ _build-%: symlink-git-packages download-packages build-docker-image
 		/app/gdb/src/compilation/build.sh $* /app/gdb/build/ /app/gdb/src $(WITH_PYTHON)
 
 pack: $(ALL_PACK_TARGETS)
+
 $(PACK_TARGETS): pack-%:
 	@$(MAKE) _pack-$*
 
