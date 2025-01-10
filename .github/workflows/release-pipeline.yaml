@@ -15,6 +15,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Generate a temporary tag (if not triggered by a tag)
+      if: github.event_name != 'push'
+      run: |
+        TEMP_TAG="manual-$(date +%Y%m%d%H%M%S)"
+        git tag $TEMP_TAG
+        echo "Temporary tag created: $TEMP_TAG"
+        echo "TEMP_TAG=$TEMP_TAG" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: sudo apt-get install -y wget
@@ -29,3 +36,4 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: build/artifacts/gdb-static-with-python-x86_64.tar.gz
+        tag_name: ${{ github.event_name == 'push' && github.ref_name || env.TEMP_TAG }}
