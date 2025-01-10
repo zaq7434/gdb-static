@@ -1,6 +1,7 @@
 name: gdb-static-pr-pipeline
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - '*'
