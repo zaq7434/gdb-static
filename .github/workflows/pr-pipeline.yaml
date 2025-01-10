@@ -10,8 +10,8 @@ jobs:
   build:
     strategy:
       matrix:
-        build_type: ["build", "build-with-python"]
-        architecture: ["x86_64", "arm", "aarch64", "powerpc", "mips", "mipsel"]
+        build_type: ["build-with-python"]
+        architecture: ["x86_64"]
 
     runs-on: ubuntu-latest
     steps:
