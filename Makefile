@@ -58,6 +58,8 @@ _build-%: symlink-git-packages download-packages build-docker-image
 		/app/gdb/src/compilation/build.sh $* /app/gdb/build/ /app/gdb/src $(WITH_PYTHON)
 
 pack: $(ALL_PACK_TARGETS)
+$(PACK_TARGETS): pack-%:
+	@$(MAKE) _pack-$*
 
 $(PYTHON_PACK_TARGETS): pack-with-python-%:
 	@TAR_EXT="with-python-" ARTIFACT_EXT="_with_python" $(MAKE) _pack-$*
