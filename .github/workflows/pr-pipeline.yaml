@@ -25,7 +25,7 @@ jobs:
     - name: Build
       run: make ${{ matrix.build_type }}-${{ matrix.architecture }} -j$((`nproc`+1))
     - name: Pack
-      run: make pack
+      run: make pack ${{ matrix.build_type }}-${{ matrix.architecture }} -j$((`nproc`+1))
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
